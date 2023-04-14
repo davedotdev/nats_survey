@@ -227,15 +227,15 @@ export const Demo = (props: DemoProps) => {
       ctx.lineTo(x1, y1)
 
       const x2 = 0
-      const y2 = 20
+      const y2 = 30
       ctx.lineTo(x2, y2)
 
-      const x3 = 20
+      const x3 = 30
       const y3 = 0
       ctx.lineTo(x3, y3)
 
-      const x4 = 20
-      const y4 = 20
+      const x4 = 30
+      const y4 = 30
       ctx.lineTo(x4, y4)      
     
     ctx.stroke()
