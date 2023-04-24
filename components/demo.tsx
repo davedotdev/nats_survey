@@ -41,7 +41,7 @@ const questions = [
     ],
   },
   {
-    label: "What topic are you most interested in learning more about?",
+    label: "What topic do you want to learn?",
     id: "topic",
     options: [
       "NATS for microservice architectures",
@@ -102,6 +102,39 @@ export const Demo = (props: DemoProps) => {
     const d = new Date()
     text = `[${d.toLocaleTimeString("en-US", { timeStyle: "long" })}] ${text}`
     setLogs(current => [...current, text])
+  }
+
+  type DotProps = {
+    option: string,
+    index: number
+  }
+
+  const Dot = ({option, index}: DotProps) => {
+
+    console.log(index)
+
+    let classVar = ""
+    switch (index) {
+      case 0:
+        classVar = "bluedot"
+        break;
+      case 1:
+        classVar = "greendot"
+        break
+      case 2:
+        classVar = "yellowdot"
+        break;
+      case 3:
+        classVar = "reddot"
+        break;
+    }
+
+    return (
+        <div className="flex pt-2">
+          <div className={classVar}></div>
+          <div className="ml-3 text-xs font-medium text-gray-900" key={index}>{option}</div>
+        </div>
+    )
   }
 
   useEffect(() => {
@@ -184,24 +217,49 @@ export const Demo = (props: DemoProps) => {
       )}
 
       {submitted && (
-        <div className="mb-8">
-          <h2 className="text-3xl mb-6 text-bold">Survey Results</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {questions.map((question, i) => (
-              <div key={i} className="bg-white shadow rounded-lg">
-                <div className="px-4 py-5 sm:p-6">
-                  <h3 className="text-xl font-semibold mb-4 line-clamp-2">{question.label}</h3>
-                  <Chart type="donut" options={{
-                    labels: question.options,
-                    legend: {
-                      show: false
-                    }
-                  }} series={seriesData(question)} />
+        <>
+          <div>
+            <h2 className="text-3xl mb-6 text-bold">Survey Results</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {questions.map((question, i) => (
+                <div key={i} className="bg-white shadow rounded-t-lg">
+                  <div className="px-4 py-5 sm:p-6">
+                    <h3 className="text-xl font-semibold mb-4 line-clamp-2">{question.label}</h3>
+                    <Chart type="donut" options={{
+                      labels: question.options,
+                      legend: {
+                        show: false,
+                        position: 'bottom',
+                        horizontalAlign: 'left',
+
+                      },
+                    }} series={seriesData(question)} />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+
+          <div className="mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {questions.map((question, i) => (
+                <div key={i} className="bg-white shadow rounded-b-lg">
+                  <div className="px-4 py-5 sm:p-6">
+                    {question.options.map((option, i2) => ( 
+                      <div key={option} className="flex items-center">
+                        <div className="w-4 h-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"></div>
+                        <label className="ml-3 block text-xs font-small text-gray-700">
+                          <div>
+                            <Dot option={option} index={i2}/>
+                          </div>
+                        </label>
+                      </div>))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
       )}
 
       {submitted && (
@@ -216,32 +274,32 @@ export const Demo = (props: DemoProps) => {
 
       {wonLottery && (
         <ReactConfetti
-        numberOfPieces={2000}
-        colors={['#27aae1', '#34a574', '#375c93', '#8dc63f']}
-        recycle={true}
-  drawShape={ctx => {
-    ctx.beginPath()
- 
-      const x1 = 0
-      const y1 = 0
-      ctx.lineTo(x1, y1)
+          numberOfPieces={2000}
+          colors={['#27aae1', '#34a574', '#375c93', '#8dc63f']}
+          recycle={true}
+          drawShape={ctx => {
+            ctx.beginPath()
 
-      const x2 = 0
-      const y2 = 30
-      ctx.lineTo(x2, y2)
+            const x1 = 0
+            const y1 = 0
+            ctx.lineTo(x1, y1)
 
-      const x3 = 30
-      const y3 = 0
-      ctx.lineTo(x3, y3)
+            const x2 = 0
+            const y2 = 30
+            ctx.lineTo(x2, y2)
 
-      const x4 = 30
-      const y4 = 30
-      ctx.lineTo(x4, y4)      
-    
-    ctx.stroke()
-    ctx.closePath()
-  }}
-/>
+            const x3 = 30
+            const y3 = 0
+            ctx.lineTo(x3, y3)
+
+            const x4 = 30
+            const y4 = 30
+            ctx.lineTo(x4, y4)
+
+            ctx.stroke()
+            ctx.closePath()
+          }}
+        />
       )}
     </div>
   )
