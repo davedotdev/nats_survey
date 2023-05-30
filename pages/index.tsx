@@ -5,6 +5,7 @@ import { Demo } from '../components/demo'
 
 const server = process.env.NEXT_PUBLIC_NATS_SERVER_URL || "nats://localhost:4222" 
 const eventName = process.env.NEXT_PUBLIC_EVENT_NAME || "my_event"
+const eventSubject = process.env.NEXT_PUBLIC_EVENT_SUBJECT || "my_subject"
 
 const Home: NextPage = () => {
   const [text, setText] = useState("")
@@ -21,7 +22,7 @@ const Home: NextPage = () => {
     <>
     <div className="text-center p-2 text-white bg-slate-800 flex justify-between">
       <div className="flex gap-4">
-        <span className="font-bold">KubeConEU 2023</span>
+        <span className="font-bold">{eventName}</span>
       </div>
     </div>
 
@@ -65,7 +66,7 @@ const Home: NextPage = () => {
       )}
 
       {name != "" && (
-        <Demo name={name} server={server} eventName={eventName} />
+        <Demo name={name} server={server} eventName={eventName} eventSubject={eventSubject} />
       )}
     </div>
     </>

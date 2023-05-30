@@ -9,6 +9,7 @@ type DemoProps = {
   name: string
   server: string
   eventName: string
+  eventSubject: string
 }
 
 type Question = {
@@ -44,7 +45,7 @@ const questions = [
     label: "What topic do you want to learn?",
     id: "topic",
     options: [
-      "NATS for microservice architectures",
+      "Perform ETL with NATS and Integrated Solutions",
       "Streaming, KV & Object Store with NATS JetStream",
       "Deploying NATS with Kubernetes",
       "Scaling your service globally from cloud to edge",
@@ -64,7 +65,7 @@ const questions = [
 
 export const Demo = (props: DemoProps) => {
   const nc = useRef<NatsConnection>()
-  const { eventName, name, server } = props
+  const { eventName, eventSubject, name, server } = props
 
   const [survey, setSurvey] = useState<any>({ name: name })
   const [surveyData, setSurveyData] = useState<Array<any>>([])
@@ -80,7 +81,7 @@ export const Demo = (props: DemoProps) => {
   const submitSurvey = () => {
     const jc = JSONCodec();
     log(`Submitting survey: ${JSON.stringify(survey)}`)
-    nc.current?.publish(`${eventName}.survey`, jc.encode(survey))
+    nc.current?.publish(`${eventSubject}.survey`, jc.encode(survey))
     setSubmitted(true)
     localStorage.setItem("name", name)
     localStorage.setItem("survey", "true")
@@ -148,19 +149,19 @@ export const Demo = (props: DemoProps) => {
         log(`Connected to ${server}`)
       }
 
-      subscribe(nc.current, `${eventName}.rolecall`, (m) => {
-        log(`Recieved message on ${eventName}.rolecall`)
+      subscribe(nc.current, `${eventSubject}.rolecall`, (m) => {
+        log(`Recieved message on ${eventSubject}.rolecall`)
         m.respond(sc.encode(name))
         log(`Responded with "${name}"`)
       })
 
-      subscribe(nc.current, `${eventName}.lottery`, (m) => {
+      subscribe(nc.current, `${eventSubject}.lottery`, (m) => {
         log("🎉 You won the lottery!")
         setWonLottery(true)
         m.respond(sc.encode(name))
       }, { queue: "lottery" })
 
-      subscribe(nc.current, `${eventName}.navigate`, (m) => {
+      subscribe(nc.current, `${eventSubject}.navigate`, (m) => {
         const url = sc.decode(m.data)
         log(`Navigating to ${url}...`)
         window.location.replace(url)
@@ -168,7 +169,7 @@ export const Demo = (props: DemoProps) => {
 
       const opts = consumerOpts()
       opts.orderedConsumer()
-      const sub = await nc.current.jetstream().subscribe(`${eventName}.survey`, opts)
+      const sub = await nc.current.jetstream().subscribe(`${eventSubject}.survey`, opts)
       for await (const m of sub) {
         setSurveyData(current => [...current, jc.decode(m.data)])
       }
