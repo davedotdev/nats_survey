@@ -116,23 +116,23 @@ export const Demo = (props: DemoProps) => {
     let classVar = ""
     switch (index) {
       case 0:
-        classVar = "bluedot"
+        classVar = "bluedot col-span-1"
         break;
       case 1:
-        classVar = "greendot"
+        classVar = "greendot col-span-1"
         break
       case 2:
-        classVar = "yellowdot"
+        classVar = "yellowdot col-span-1"
         break;
       case 3:
-        classVar = "reddot"
+        classVar = "reddot col-span-1"
         break;
     }
 
     return (
-        <div className="flex pt-2">
+        <div className="flex pt-2 grid grid-flow-col gap-2">
           <div className={classVar}></div>
-          <div className="ml-3 text-xs font-medium text-gray-900" key={index}>{option}</div>
+          <div className="ml-3 text-xs font-medium text-gray-900 col-span-2" key={index}>{option}</div>
         </div>
     )
   }
@@ -247,7 +247,6 @@ export const Demo = (props: DemoProps) => {
                   <div className="px-4 py-5 sm:p-6">
                     {question.options.map((option, i2) => ( 
                       <div key={option} className="flex items-center">
-                        <div className="w-4 h-4 border-gray-300 text-indigo-600 focus:ring-indigo-500"></div>
                         <label className="ml-3 block text-xs font-small text-gray-700">
                           <div>
                             <Dot option={option} index={i2}/>
